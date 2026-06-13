@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>肖勤勤 | AI 产品经理 & AI 效率专员</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: rgba(18, 18, 24, 0.8);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --glow-blue: #3b82f6;
+      --glow-purple: #8b5cf6;
+      --glow-cyan: #06b6d4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ==================== 鼠标渐变跟随效果 ==================== */
+    .cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      mix-blend-mode: screen;
+      transition: width 0.2s, height 0.2s;
+    }
+
+    /* ==================== 炫酷背景 ==================== */
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .grid-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .gradient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+    }
+    .orb-1 { top: 20%; left: 15%; width: 300px; height: 300px; background: var(--glow-cyan); }
+    .orb-2 { top: 40%; right: 10%; width: 400px; height: 400px; background: var(--glow-purple); }
+
+    /* ==================== 悬浮导航栏 ==================== */
+    .floating-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(10, 10, 12, 0.7);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      padding: 10px 24px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .nav-logo { font-weight: 800; color: var(--glow-cyan); text-decoration: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.3s; margin: 0 10px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-main); text-shadow: 0 0 10px var(--glow-blue); }
+
+    /* ==================== HERO SECTION ==================== */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .hero-badge {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .badge-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
+    .hero-title { font-size: 56px; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+    .hero-title .name { background: linear-gradient(135deg, var(--glow-blue), var(--glow-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-subtitle { font-size: 24px; color: var(--text-muted); margin-bottom: 40px; font-family: 'JetBrains Mono', monospace; }
+    
+    /* 数据流看板 */
+    .hero-stats { display: flex; gap: 40px; margin-bottom: 40px; background: rgba(255,255,255,0.02); padding: 20px 40px; border-radius: 16px; border: 1px solid var(--card-border); }
+    .stat-item { display: flex; flex-direction: column; align-items: center; }
+    .stat-number { font-size: 36px; font-weight: 800; color: #fff; }
+    .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .stat-live { font-size: 9px; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; margin-top: 6px; font-weight: bold; animation: pulse 2s infinite; }
+
+    /* ==================== 通用板块布局 ==================== */
+    .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px; position: relative; z-index: 2; }
+    .section-header { margin-bottom: 50px; }
+    .section-tag { color: var(--glow-cyan); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .section-title { font-size: 32px; font-weight: 800; margin-top: 8px; }
+    
+    /* 卡片磨砂玻璃效果 */
+    .about-card, .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(16px);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .about-card:hover, .project-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    /* 优势Box */
+    .advantage-text { font-size: 16px; line-height: 1.8; color: #e5e7eb; }
+    .advantage-text highlight { color: var(--glow-cyan); font-weight: 600; }
+
+    /* ==================== 项目与交互系统样式 ==================== */
+    .project-showcase { display: flex; flex-direction: column; gap: 40px; margin-top: 30px; }
+    .project-grid-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+    
+    /* 动态可视化架构图展示 */
+    .visual-panel { background: rgba(0, 0, 0, 0.4); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(255,255,255,0.05); }
+    .agent-pipeline { display: flex; flex-direction: column; gap: 12px; }
+    .agent-node { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 15px; transition: all 0.3s; }
+    .agent-node:hover { background: rgba(59, 130, 246, 0.1); border-color: var(--glow-blue); }
+    .agent-node.active { background: rgba(6, 182, 212, 0.15); border-color: var(--glow-cyan); box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
+    .node-icon { font-size: 20px; }
+    .node-info h5 { font-size: 14px; color: #fff; }
+    .node-info p { font-size: 12px; color: var(--text-muted); }
+
+    /* 项目详情区 */
+    .project-details h3 { font-size: 22px; margin-bottom: 15px; color: #fff; }
+    .project-meta { font-size: 13px; color: var(--glow-purple); margin-bottom: 15px; font-weight: 500; }
+    .detail-list { list-style: none; }
+    .detail-list li { margin-bottom: 12px; font-size: 14px; color: #d1d5db; line-height: 1.6; }
+    .detail-list strong { color: var(--glow-cyan); }
+
+    /* 技能标签群 */
+    .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .skill-cat h4 { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; border-left: 2px solid var(--glow-purple); padding-left: 8px; }
+    .tags-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); padding: 6px 12px; border-radius: 6px; font-size: 13px; color: #cbd5e1; }
+    .tag:hover { background: var(--glow-blue); color: #fff; }
+
+    /* 轮询动画 */
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    @media (max-width: 768px) {
+      .project-grid-layout { grid-template-columns: 1fr; }
+      .hero-title { font-size: 38px; }
+      .floating-nav { width: 90%; justify-content: space-between; padding: 10px 15px; }
+      .nav-links { display: none; } /* 移动端精简 */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Floating Navigation -->
+  <nav class="floating-nav">
+    <a href="#hero" class="nav-logo">QQ.XIAO</a>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#skills">技能栈</a>
+      <a href="#projects">精选项目</a>
+      <a href="#experience">经历</a>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="grid-bg"></div>
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>随时可投入工作 / 独立快速交付 Demo</span>
+      </div>
+      <h1 class="hero-title">
+        你好，我是 <span class="name">肖勤勤</span>
+      </h1>
+      <p class="hero-subtitle">AI 产品经理 & 企业 AI 效率专员</p>
+      
+      <!-- 动态交互数字看板 -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="efficiencyKPI">0%</span>
+          <span class="stat-label">专利单件维护提效</span>
+          <span class="stat-live">LIVE METRIC</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">85%</span>
+          <span class="stat-label">IPC 自动分类准确率</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">14项</span>
+          <span class="stat-label">深度控盘技术专利申请</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT SECTION ==================== -->
+  <section class="container" id="about">
+    <div class="section-header">
+      <span class="section-tag">ADVANTAGE</span>
+      <h2 class="section-title">个人优势</h2>
+    </div>
+    <div class="about-card">
+      <p class="advantage-text">
+        擅长利用 <highlight>Vibe Coding 范式</highlight> 快速将产品构想转化为高保真、可交互的前端 Demo。<br>
+        能够独立完成从**需求洞察、架构设计到产品验证**的 0 到 1 全流程，建立起业务与深度技术之间的高效协作桥梁。
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== SKILLS SECTION ==================== -->
+  <section class="container" id="skills">
+    <div class="section-header">
+      <span class="section-tag">TECH STACK</span>
+      <h2 class="section-title">核心技术栈</h2>
+    </div>
+    <div class="skills-container">
+      <div class="skill-cat">
+        <h4>AI 赋能与提效</h4>
+        <div class="tags-group">
+          <span class="tag">Vibe Coding 范式</span>
+          <span class="tag">Prompt 优化与设计</span>
+          <span class="tag">Ollama 本地部署</span>
+          <span class="tag">Qwen / Phi 模型</span>
+          <span class="tag">云端 API 协同调用</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h4>产品管理能力</h4>
+        <div class="tags-group">
+          <span class="tag">用户调研与竞品分析</span>
+          <span class="tag">需求拆解与 PRD 撰写</span>
+          <span class="tag">高保真原型交互优化</span>
+          <span class="tag">B端产品从0到1闭环</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h4>数据挖掘分析</h4>
+        <div class="tags-group">
+          <span class="tag">SQL 提取</span>
+          <span class="tag">Python 脚本开发</span>
+          <span class="tag">SPSS 数据清洗</span>
+          <span class="tag">指标体系拆解</span>
+          <span class="tag">数据看板可视化</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROJECTS SECTION ==================== -->
+  <section class="container" id="projects">
+    <div class="section-header">
+      <span class="section-tag">FEATURED PROJECTS</span>
+      <h2 class="section-title">精选项目 (可交互架构视图)</h2>
+    </div>
+    
+    <div class="project-showcase">
+      <!-- 项目一：全生命周期专利管理系统 -->
+      <div class="project-card project-grid-layout">
+        <!-- 可交互管道流 -->
+        <div class="visual-panel">
+          <div class="agent-pipeline">
+            <div class="agent-node active" data-desc="P0级高频刚需：自动关联年费限期与法律状态更新">
+              <div class="node-icon">🚨</div>
+              <div class="node-info">
+                <h5>年费逾期预警机制</h5>
+                <p>状态动态跟踪与数据可视化</p>
+              </div>
+            </div>
+            <div class="agent-node" data-desc="P1级刚需：设计置信度三级兜底机制预防LLM幻觉，准确率达85%">
+              <div class="node-icon">🧠</div>
+              <div class="node-info">
+                <h5>LLM IPC 自动分类</h5>
+                <p>Prompt层优化设计</p>
+              </div>
+            </div>
+            <div class="agent-node" data-desc="P2级高频提效：智能解析全文，毫秒级流式生成标准化专利摘要">
+              <div class="node-icon">📝</div>
+              <div class="node-info">
+                <h5>摘要自动生成模块</h5>
+                <p>LLM大模型核心重构</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 文本详情 -->
+        <div class="project-details">
+          <h3>企业专利全生命周期管理系统</h3>
+          <p class="project-meta">2025.12 - 2026.03 · 企业 AI 提效核心项目</p>
+          <ul class="detail-list">
+            <li><strong>场景洞察：</strong>针对中小企业专利管理“成本高、文件繁、预警乱、分析慢、筛查难”的业务痛点设计的轻量级高阶提效管理平台。</li>
+            <li><strong>量化成果：</strong>落地后实现 100+ 件专利集中管控制度，单件专利日常维护时间由 **5分钟骤降至30秒**，实现全业务端 <strong>90% 的效率跃升</strong>。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 项目二：旅算家 -->
+      <div class="project-card project-grid-layout">
+        <div class="visual-panel">
+          <div class="agent-pipeline">
+            <div class="agent-node active" data-desc="多Agent并行执行：打破Pipeline串联延迟，将整体动态响应压缩在30秒内">
+              <div class="node-icon">⚡</div>
+              <div class="node-info">
+                <h5>6-Agent 协同编排</h5>
+                <p>支持真实API拓展(携程/点评)</p>
+              </div>
+            </div>
+            <div class="agent-node" data-desc="自动预算控制闭环系统：超支自动触发自适应降级调整策略">
+              <div class="node-icon">💰</div>
+              <div class="node-info">
+                <h5>自动预算控制循环</h5>
+                <p>模块级解耦与独立优化</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-details">
+          <h3>旅算家 · Multi-Agent 旅游行程规划应用</h3>
+          <p class="project-meta">2026.03 - 2026.05 · 独立开发与架构设计</p>
+          <ul class="detail-list">
+            <li><strong>场景洞察：</strong>解决大批自由行用户面临的“规划耗时、信息过载、预算失控”三大痛点，提供了一站式 AI 智能规划 + 预算闭环的前端交互高保真 Demo。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EXPERIENCE SECTION ==================== -->
+  <section class="container" id="experience">
+    <div class="section-header">
+      <span class="section-tag">EXPERIENCE</span>
+      <h2 class="section-title">工作与实习经历</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="about-card">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <h4 style="color:#fff;">上海波赫驱动系统有限公司</h4>
+          <span style="color:var(--glow-cyan);">专利工程师 | 2024.12 - 2026.03</span>
+        </div>
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6;">
+          辅助主导工程师完成 **9项实用新型专利申请** (2项已授权)，**5项发明专利答复** (2项已授权)。因发现年费、分类及摘要部分的繁琐重合劳动，以此为业务原型独立设计并落地了专利管理提效系统。
+        </p>
+      </div>
+      <div class="about-card">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <h4 style="color:#fff;">安徽理工大学党委宣传部</h4>
+          <span style="color:var(--glow-purple);">运营实习生 | 2021.01 - 2022.12</span>
+        </div>
+        <p style="font-size: 14px; color: var(--text-muted);">
+          负责核心全媒内容增长策略开发，推动官方微信号、抖音号分别完成 **5000+** 及 **1w+** 的私域粉丝增量。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== JAVASCRIPT INTERACTIVE ==================== -->
+  <script>
+    // 1. 鼠标动态跟随光晕效果 (Mouse Glow Effect)
+    const glow = document.getElementById('cursorGlow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // 2. 交互式卡片节点切换机制
+    document.querySelectorAll('.agent-node').forEach(node => {
+      node.addEventListener('mouseenter', function() {
+        // 清除同级别节点的激活状态
+        const parent = this.parentElement;
+        parent.querySelectorAll('.agent-node').forEach(n => n.classList.remove('active'));
+        this.classList.add('active');
+        
+        // 动态变更项目描述信息 (可根据需要扩展联动右侧文字内容)
+        console.log(this.getAttribute('data-desc'));
+      });
+    });
+
+    // 3. 实时数字动效（进入页面时数值从0跃升至90%）
+    function animateValue(obj, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start) + "%";
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      const obj = document.getElementById("efficiencyKPI");
+      setTimeout(() => {
+        animateValue(obj, 0, 90, 1500);
+      }, 500);
+    });
+  </script>
+</body>
+</html>
