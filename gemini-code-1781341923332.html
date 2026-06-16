@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>肖勤勤 | AI 产品经理 & AI 效率专员</title>
+  <title>肖勤勤 | AI 产品经理 & AI 效率提示专员</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -115,8 +115,10 @@
       font-size: 13px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      margin-bottom: 24px;
+      margin: 0 auto 24px;
+      width: fit-content;
     }
     .badge-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
     .hero-title { font-size: 56px; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
@@ -129,6 +131,47 @@
     .stat-number { font-size: 36px; font-weight: 800; color: #fff; }
     .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
     .stat-live { font-size: 9px; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; margin-top: 6px; font-weight: bold; animation: pulse 2s infinite; }
+
+    /* ==================== 鼠标滚轮提示 ==================== */
+    .scroll-indicator {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin: -160px auto 0;
+      width: fit-content;
+    }
+    .scroll-mouse {
+      width: 26px;
+      height: 40px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 14px;
+      position: relative;
+    }
+    .scroll-mouse::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 8px;
+      background: var(--glow-cyan);
+      border-radius: 3px;
+      animation: scrollWheel 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollWheel {
+      0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      100% { transform: translateX(-50%) translateY(14px); opacity: 0; }
+    }
+    .scroll-hint {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 1px;
+      font-weight: 300;
+    }
 
     /* ==================== 通用板块布局 ==================== */
     .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px; position: relative; z-index: 2; }
@@ -175,6 +218,64 @@
     .detail-list li { margin-bottom: 12px; font-size: 14px; color: #d1d5db; line-height: 1.6; }
     .detail-list strong { color: var(--glow-cyan); }
 
+    /* ==================== 用户旅程样式 ==================== */
+    .journey-section {
+      grid-column: 1 / -1;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .journey-label {
+      font-size: 12px;
+      color: var(--glow-cyan);
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .journey-steps {
+      display: flex;
+      gap: 0;
+      position: relative;
+      align-items: stretch;
+    }
+    .journey-step {
+      flex: 1;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: default;
+      position: relative;
+    }
+    .journey-step + .journey-step {
+      margin-left: 28px;
+    }
+    .journey-step + .journey-step::before {
+      content: '→';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: var(--glow-cyan);
+      opacity: 0.4;
+      font-weight: 300;
+    }
+    .journey-step:hover {
+      transform: translateY(-4px);
+      border-color: var(--glow-cyan);
+      box-shadow: 0 0 18px rgba(6, 182, 212, 0.15);
+      background: rgba(6, 182, 212, 0.05);
+    }
+    .journey-step-icon { font-size: 24px; margin-bottom: 6px; display: block; }
+    .journey-step-title { font-size: 13px; font-weight: 600; color: #fff; }
+    .journey-step-desc { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.3; }
+
     /* 技能标签群 */
     .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
     .skill-cat h4 { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; border-left: 2px solid var(--glow-purple); padding-left: 8px; }
@@ -190,6 +291,8 @@
       .hero-title { font-size: 38px; }
       .floating-nav { width: 90%; justify-content: space-between; padding: 10px 15px; }
       .nav-links { display: none; } /* 移动端精简 */
+      .journey-steps { flex-wrap: wrap; gap: 8px; }
+      .journey-step { flex: 0 0 calc(50% - 4px); min-width: 0; }
     }
   </style>
 </head>
@@ -221,42 +324,46 @@
         <span>可随时投入工作</span>
       </div>
       <h1 class="hero-title">
-        你好，我是 <span class="name">肖勤勤</span>
+        <span style="font-size:28px; font-weight:500; display:block; color:var(--text-muted); letter-spacing:2px;">你好，我是</span>
+        <span class="name" style="font-size:100px;">肖勤勤</span>
       </h1>
-      <p class="hero-subtitle">AI 产品经理 & 企业 AI 效率专员</p>
+      <p class="hero-subtitle"><span id="typedText"></span><span id="cursorBlink" style="color:var(--glow-cyan); font-weight:300;">|</span></p>
       
-      <!-- 动态交互数字看板 -->
-      <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-number" id="efficiencyKPI">0%</span>
-          <span class="stat-label">专利单件维护提效</span>
-          <span class="stat-live">LIVE METRIC</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">85%</span>
-          <span class="stat-label">IPC 自动分类准确率</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">14项</span>
-          <span class="stat-label">深度控盘技术专利申请</span>
-        </div>
+    
       </div>
     </div>
   </section>
 
-  <!-- ==================== ABOUT SECTION ==================== -->
-  <section class="container" id="about">
+  <!-- 鼠标滚轮提示 -->
+  <div class="scroll-indicator">
+    <div class="scroll-mouse"></div>
+    <span class="scroll-hint">SCROLL</span>
+  </div>
+
+  <!-- ==================== INTRO SECTION ==================== -->
+  <section class="container" id="intro" style="padding-bottom:30px;">
     <div class="section-header">
-      <span class="section-tag">ADVANTAGE</span>
-      <h2 class="section-title">个人优势</h2>
+      <span class="section-tag">ABOUT ME</span>
+      <h2 class="section-title">个人介绍</h2>
     </div>
-    <div class="about-card">
-      <p class="advantage-text">
-        擅长利用 <highlight>Vibe Coding 范式</highlight> 快速将产品构想转化为高保真、可交互的前端 Demo。<br>
-        能够独立完成从**需求洞察、架构设计到产品验证**的 0 到 1 全流程，建立起业务与深度技术之间的高效协作桥梁。
-      </p>
+    <div class="about-card" style="display:flex; align-items:center; gap:40px; padding:30px;">
+      <div style="flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <div style="width:100px; height:100px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.02);">
+          <img src="人设-毛毡(半身)(1).png" style="width:100px; height:100px; object-fit:cover; display:block;">
+        </div>
+        <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">github ：kukubalu-c</span>
+      </div>
+      <div style="flex:1;">
+        <p style="font-size:16px; line-height:2; color:#e5e7eb; margin:0 0 16px 0;">
+          擅长通过用户洞察和数据分析驱动产品决策，利用 <strong style="color:var(--glow-cyan);">Vibe Coding 范式</strong>快速将产品构想转化为高保真、可交互的前端 Demo；拥有从 0 到 1 的完整产品落地经验，熟悉 AI 赋能的产品设计与开发流程，致力于打造高效、智能的 AI 产品解决方案。<br>
+        </p>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          <span style="padding:6px 16px; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); border-radius:20px; font-size:13px; color:var(--text-main); font-weight:500;">安徽理工大学</span>
+          <span style="padding:6px 16px; background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.3); border-radius:20px; font-size:13px; color:var(--text-main); font-weight:500;">知乎粉丝1W+</span>
+          <span style="padding:6px 16px; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:20px; font-size:13px; color:var(--text-main); font-weight:500;">专利撰写12项</span>
+          <span style="padding:6px 16px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:20px; font-size:13px; color:var(--text-main); font-weight:500;">github开源贡献者</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -301,16 +408,62 @@
           <h3>企业专利全生命周期管理系统</h3>
           <p class="project-meta">2025.12 - 2026.03 · 企业 AI 提效核心项目</p>
           <ul class="detail-list">
-            <li><strong>场景洞察：</strong>针对中小企业专利管理“成本高、文件繁、预警乱、分析慢、筛查难”的业务痛点设计的轻量级高阶提效管理平台。</li>
-            <li><strong>量化成果：</strong>落地后实现 100+ 件专利集中管控制度，单件专利日常维护时间由 **5分钟骤降至30秒**，实现全业务端 <strong>90% 的效率跃升</strong>。</li>
+            <li><strong>场景洞察：</strong>针对中小企业专利管理“成本高、文件繁、预警乱、分析慢、筛查难”的业务痛点设计的轻量化专利管理工具。</li>
+            <li><strong>产品决策：</strong>年费逾期预警+专利状态跟踪+数据可视化（P0级高频刚需）、IPC 自动分类（P1级高频需求且可量化验证）、摘要自动生成（P2级需求）</li>
+            <li><strong>迭代优化与验证：</strong>设计 Prompt 优化，置信度三级机制兜底，有效预防LLM幻觉，在小样本测试集（100件已授权专利）上，IPC分类的组类准确率达<strong>85%</strong>；产品落地后实现100+件专利集中管理，单件专利维护时间从5分钟降至30秒（效率提升<strong>90%</strong>）。</li>
           </ul>
-          <a href="https://kukubalu-c.github.io/patent-mgt-demo/" target="_blank" style="display:inline-flex; align-items:center; gap:6px; margin-top:16px; padding:8px 20px; background:linear-gradient(135deg, var(--glow-blue), var(--glow-purple)); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; font-weight:600; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 20px rgba(59,130,246,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">🚀 点击在线体验 Demo</a>
+        </div>
+        <!-- 用户旅程 -->
+        <div class="journey-section">
+          <div class="journey-label"><span>👣</span> 用户视角流程</div>
+          <div class="journey-steps">
+            <div class="journey-step">
+              <span class="journey-step-icon">🔐</span>
+              <div class="journey-step-title">登录系统</div>
+              <div class="journey-step-desc">企业用户身份认证</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">📊</span>
+              <div class="journey-step-title">年费仪表盘</div>
+              <div class="journey-step-desc">逾期状态一目了然</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">📄</span>
+              <div class="journey-step-title">上传专利文档</div>
+              <div class="journey-step-desc">拖拽或批量导入</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">🧠</span>
+              <div class="journey-step-title">IPC 自动分类</div>
+              <div class="journey-step-desc">AI 分析分配分类号</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">✍️</span>
+              <div class="journey-step-title">摘要自动生成</div>
+              <div class="journey-step-desc">LLM 提炼核心内容</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">📤</span>
+              <div class="journey-step-title">一键导出/提交</div>
+              <div class="journey-step-desc">生成标准化文件</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; grid-column:1/-1; margin-top:8px;">
+          <a href="https://kukubalu-c.github.io/patent-mgt-demo/" target="_blank" style="display:inline-flex; align-items:center; gap:6px; padding:8px 24px; background:linear-gradient(135deg, var(--glow-blue), var(--glow-purple)); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; font-weight:600; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 20px rgba(59,130,246,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''"> 点击在线体验 Demo</a>
         </div>
       </div>
       <div class="project-card project-grid-layout">
         <div class="visual-panel">
           <div class="agent-pipeline">
-            <div class="agent-node active" data-desc="多Agent并行执行：打破Pipeline串联延迟，将整体动态响应压缩在30秒内">
+            <div class="agent-node active" data-desc="AI自动生成个性化行程规划，一站式解决行程规划痛点">
+              <div class="node-icon">🧭</div>
+              <div class="node-info">
+                <h5>一站式AI智能规划</h5>
+                <p>智能生成完整出行方案</p>
+              </div>
+            </div>
+            <div class="agent-node" data-desc="多Agent并行执行：打破Pipeline串联延迟，将整体动态响应压缩在30秒内">
               <div class="node-icon">⚡</div>
               <div class="node-info">
                 <h5>6-Agent 协同编排</h5>
@@ -330,9 +483,49 @@
           <h3>旅算家 · Multi-Agent 旅游行程规划应用</h3>
           <p class="project-meta">2026.03 - 2026.05 · 独立开发与架构设计</p>
           <ul class="detail-list">
-            <li><strong>场景洞察：</strong>解决大批自由行用户面临的”规划耗时、信息过载、预算失控”三大痛点，提供了一站式 AI 智能规划 + 预算闭环的前端交互高保真 Demo。</li>
+            <li><strong>场景洞察：</strong>据中国旅游研究院数据，2025年自由行用户占比超过<strong>65%</strong>，但现有产品缺少<strong>“一站式AI智能规划+预算闭环”</strong>方案，用户面临规划耗时、信息过载、预算失控三大痛点。</li>
+            <li><strong>产品决策：</strong>基于用户需求和市场调研，确定了核心功能模块，包括目的地推荐、智能行程规划和预算控制。</li>
+            <li><strong>技术实现：</strong>采用多Agent并行架构，打破传统Pipeline串联延迟，将整体动态响应时间压缩在20秒内，自动预算控制闭环系统在用户预算超支时触发降级，确保用户体验。</li>
           </ul>
-          <a href="https://kukubalu-c.github.io/-Multi-Agent-/" target="_blank" style="display:inline-flex; align-items:center; gap:6px; margin-top:16px; padding:8px 20px; background:linear-gradient(135deg, var(--glow-blue), var(--glow-purple)); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; font-weight:600; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 20px rgba(59,130,246,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">🚀 点击在线体验 Demo</a>
+        </div>
+        <!-- 用户旅程 -->
+        <div class="journey-section">
+          <div class="journey-label"><span>👣</span> 用户视角流程</div>
+          <div class="journey-steps">
+            <div class="journey-step">
+              <span class="journey-step-icon">✏️</span>
+              <div class="journey-step-title">用户输入偏好</div>
+              <div class="journey-step-desc">同行人数、天数、预算、偏好等</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">🚀</span>
+              <div class="journey-step-title">点击"开始AI规划"</div>
+              <div class="journey-step-desc">触发多Agent调度</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">⏳</span>
+              <div class="journey-step-title">进度提示</div>
+              <div class="journey-step-desc">6 Agent 逐步执行</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">📋</span>
+              <div class="journey-step-title">获取完整方案</div>
+              <div class="journey-step-desc">目的地+交通+住宿+行程+预算</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">🔄</span>
+              <div class="journey-step-title">手动调整</div>
+              <div class="journey-step-desc">切换目的地/换交通/换酒店</div>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-icon">💾</span>
+              <div class="journey-step-title">保存方案</div>
+              <div class="journey-step-desc">导出或收藏行程</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; grid-column:1/-1; margin-top:8px;">
+          <a href="https://kukubalu-c.github.io/-Multi-Agent-/" target="_blank" style="display:inline-flex; align-items:center; gap:6px; padding:8px 24px; background:linear-gradient(135deg, var(--glow-blue), var(--glow-purple)); color:#fff; text-decoration:none; border-radius:8px; font-size:14px; font-weight:600; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 20px rgba(59,130,246,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''"> 点击在线体验 Demo</a>
         </div>
       </div>
     </div>
@@ -350,8 +543,9 @@
           <h4 style="color:#fff;">上海波赫驱动系统有限公司</h4>
           <span style="color:var(--glow-cyan);">专利工程师 | 2024.12 - 2026.03</span>
         </div>
-        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6;">
-          辅助主导工程师完成 **9项实用新型专利申请** (2项已授权)，**5项发明专利答复** (2项已授权)。因发现年费、分类及摘要部分的繁琐重合劳动，以此为业务原型独立设计并落地了专利管理提效系统。
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.8;">
+          <strong style="color:var(--glow-cyan);">技术挖掘：</strong>挖掘创新性专利技术点，协助工程师完成9项实用新型专利申请（2项已授权），5项发明专利答复（2项已授权）；根据研发需求进行专利检索，为技术开发提供参考。<br>
+          <strong style="color:var(--glow-cyan);">企业知识产权管理：</strong>持续跟进专利申请全流程、跟踪专利法律状态，定期更新统计表；在年费管理、IPC分类、摘要撰写中发现重复劳动痛点，以此为业务原型，独立自主设计并落地了"企业专利全生命周期管理系统"。
         </p>
       </div>
       <div class="about-card">
@@ -360,7 +554,16 @@
           <span style="color:var(--glow-purple);">运营实习生 | 2021.01 - 2022.12</span>
         </div>
         <p style="font-size: 14px; color: var(--text-muted);">
-          负责核心全媒内容增长策略开发，推动官方微信号、抖音号分别完成 **5000+** 及 **1w+** 的私域粉丝增量。
+          <strong style="color:var(--glow-cyan);">全媒策划：</strong>内容增长策略设计，推动校官方公众号涨粉5000+、抖音累计涨粉1w+；。
+        </p>
+      </div>
+      <div class="about-card">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <h4 style="color:#fff;">杭州代创广告有限公司</h4>
+          <span style="color:var(--glow-purple);">广告设计实习生 | 2022.06 - 2022.08</span>
+        </div>
+        <p style="font-size: 14px; color: var(--text-muted);">
+          <strong style="color:var(--glow-cyan);">广告设计：</strong>完成近百张广告设计稿（包括宣传海报，企业logo，卡通吉祥物形象等）。
         </p>
       </div>
     </div>
@@ -389,15 +592,14 @@
           <span class="tag">用户调研与竞品分析</span>
           <span class="tag">需求拆解与 PRD 撰写</span>
           <span class="tag">高保真原型交互优化</span>
-          <span class="tag">B端产品从0到1闭环</span>
+          <span class="tag">敏捷迭代与数据驱动</span>
         </div>
       </div>
       <div class="skill-cat">
         <h4>数据挖掘分析</h4>
         <div class="tags-group">
           <span class="tag">SQL 提取</span>
-          <span class="tag">Python 脚本开发</span>
-          <span class="tag">SPSS 数据清洗</span>
+          <span class="tag">Python </span>
           <span class="tag">指标体系拆解</span>
           <span class="tag">数据看板可视化</span>
         </div>
@@ -406,12 +608,12 @@
   </section>
 
   <!-- ==================== CONTACT SECTION ==================== -->
-  <section class="container" id="contact">
-    <div class="section-header">
-      <span class="section-tag">CONTACT</span>
-      <h2 class="section-title">联系我</h2>
+  <section class="container" id="contact" style="background:linear-gradient(180deg, rgba(10,10,12,1) 0%, rgba(18,18,36,1) 50%, rgba(10,10,12,1) 100%);">
+    <div class="section-header" style="text-align:center;">
+      <span class="section-tag" style="font-size:14px;">CONTACT</span>
+      <h2 class="section-title" style="font-size:40px;">联系我</h2>
     </div>
-    <div class="about-card" style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center; padding:40px 30px;">
+    <div style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center;">
       <div class="contact-card" data-contact="15856864233" data-label="电话" style="display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:var(--text-main); padding:20px 30px; background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:12px; min-width:160px; cursor:pointer; transition:transform 0.3s, border-color 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--glow-cyan)'" onmouseout="this.style.transform='';this.style.borderColor=''">
         <span style="font-size:32px;">📞</span>
         <span style="font-size:15px; font-weight:600;">电话</span>
@@ -497,6 +699,64 @@
           document.getElementById('modalTitle').textContent = '确认复制' + pendingLabel;
           document.getElementById('modalContact').textContent = pendingContact;
           document.getElementById('contactModal').style.display = 'flex';
+        });
+      });
+
+      // 5. 打字机特效（循环）
+      const text = "AI 产品经理 & 企业 AI 效率专员";
+      const el = document.getElementById("typedText");
+      let i = 0;
+      let isDeleting = false;
+
+      function typeWriter() {
+        if (!isDeleting) {
+          // 打字阶段
+          if (i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 75 + Math.random() * 50);
+          } else {
+            // 打字完成，等待 2 秒后开始删除
+            setTimeout(() => {
+              isDeleting = true;
+              typeWriter();
+            }, 2000);
+          }
+        } else {
+          // 删除阶段
+          if (i > 0) {
+            el.textContent = text.substring(0, i - 1);
+            i--;
+            setTimeout(typeWriter, 40 + Math.random() * 30);
+          } else {
+            // 删除完成，等待 0.5 秒后重新打字
+            isDeleting = false;
+            setTimeout(typeWriter, 500);
+          }
+        }
+      }
+
+      setTimeout(typeWriter, 600);
+
+      // 6. 用户旅程 ↔ Agent 节点 hover 联动
+      document.querySelectorAll('.project-card').forEach(card => {
+        const steps = card.querySelectorAll('.journey-step');
+        const nodes = card.querySelectorAll('.agent-node');
+        if (!steps.length || !nodes.length) return;
+        steps.forEach((step, idx) => {
+          step.addEventListener('mouseenter', () => {
+            nodes.forEach(n => n.classList.remove('active'));
+            if (nodes[idx]) nodes[idx].classList.add('active');
+          });
+        });
+        nodes.forEach((node, idx) => {
+          node.addEventListener('mouseenter', () => {
+            steps.forEach(s => s.style.borderColor = '');
+            if (steps[idx]) steps[idx].style.borderColor = 'var(--glow-cyan)';
+          });
+          node.addEventListener('mouseleave', () => {
+            steps.forEach(s => s.style.borderColor = '');
+          });
         });
       });
     });
